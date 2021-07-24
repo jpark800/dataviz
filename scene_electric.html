@@ -1,0 +1,56 @@
+<script src='https://d3js.org/d3.v5.min.js'></script>
+<br/><h3>Fuel Efficiency: Electric</h3><br/>
+<p style="padding-left : 2%">The chart below shows fuel efficiency of Electric engine.</p>
+<p style="padding-left : 2%">It shows the separation from the cumbustion engine's fuel efficiency</p>
+<p style="padding-left : 2%">A clear sign of being at the fuel efficiency inflection point!!</p>
+<style> circle {fill: lightblue; stroke: black;} </style>
+<body onload='init()'>
+<svg width=300 height=300>
+</svg>
+<script>
+async function init() {
+
+const data = await d3.csv("https://flunky.github.io/cars2017.csv");
+const height = 200;
+const margin = 50;
+const xdomain = [10,150];
+const xrange = [0,200];
+const ydomain = [10,150];
+const yrange = [200,0];
+var xs = d3.scaleLog().base(10).domain(xdomain).range(xrange);
+var ys = d3.scaleLog().base(10).domain(ydomain).range(yrange);
+d3.select("svg").append("g").attr("transform","translate("+margin+","+margin+")").selectAll("circle").data(data).enter().append("circle").filter(function (d){ return d.Fuel=="Electricity";})
+.attr("cx", function(d,i){return xs(d.AverageCityMPG);})
+.attr("cy", function(d,i){return ys(d.AverageHighwayMPG);})
+.attr("r", function(d,i){return 2;});
+
+d3.select("svg").append("g").attr("transform","translate("+margin+","+margin+")")
+.call(d3.axisLeft(ys)
+.tickValues([10,20,50,100])
+.tickFormat(d3.format("~s")));
+
+d3.select("svg").append("g").attr("transform","translate("+margin+","+(height+margin)+")")
+.call(d3.axisBottom(xs)
+.tickValues([10,20,50,100])
+.tickFormat(d3.format("~s")));
+
+d3.select("svg").append("text").attr("transform","translate("+margin+","+(height+margin)+")")
+    .attr("class", "x label")
+    .attr("text-anchor", "end")
+    .attr("x", 200)
+    .attr("y", 40)
+    .text("Highway MPG");
+
+d3.select("svg").append("text").attr("transform","translate("+margin+","+margin+")")
+    .attr("class", "y label")
+    .attr("text-anchor", "end")
+    .attr("x", 45)
+    .attr("y", -15)
+    .text("City MPG");
+
+}
+
+</script><div class="tooltip" style="opacity: 0;"></div>
+<h3><a href="drilldown_electric.html">Want to find out about Electric engine?</a></h3><br>
+<h3><a href="index.html">Start over!</a></h3><br>
+</body></html>
